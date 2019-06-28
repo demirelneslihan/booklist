@@ -9,20 +9,7 @@ class Book{
 //UI Class: Handle Uı Tasks
 class UI{
     static displayBooks(){
-        const StoredBooks= [
-            {
-                title: 'Book One',
-                author: 'Jan e ',
-                isbn: '34'
-            },
-            {
-                title: 'Book Two',
-                author: 'Jane',
-                isbn: '45'
-            }
-        ];
-
-        const book = StoredBooks;
+        const books= Store.getBooks();
         StoredBooks.forEach((book) => UI.addBookToList(book));  
     }
 
@@ -80,15 +67,16 @@ class Store {
 
     }
     static removeBook(isbm){
+        const books=Store.getBooks();
+
+        books.forEach((book,index) => {
+            if (book.isbn ===isbn){
+                books.splice(index,1);
+           }
+        });
 
     }
 }
-
-
-
-
-
-
 
 //Event: Display Books 
 document.addEventListener('DOMContentLoaded',UI.displayBooks,displayBooks);
@@ -116,6 +104,9 @@ document.querySelector('#book-form').addEventListener('submit',(e)=>{
     //Add Book to UI
     UI.addBookToList(book);
 
+    //Add book to store
+    Store.addBook(book);
+
     //Show success message 
     UI.showAlert('Book Added','success');
 
@@ -127,10 +118,14 @@ document.querySelector('#book-form').addEventListener('submit',(e)=>{
 
     //Event : Remove a Book 
     document.querySelector('#book-list').addEventListener('click',(e)=>{
-        UI.deleteBook(e.target);
     
+        //Remo<input type="submit" value="Add Book" class="btn btn- primary btn-block">ve book from UI
+        UI.deleteBook(e.target);
 
-    //Show success message
-    UI.showAlert('Book Removed', 'succes');
+        //Remove book from store 
+        Store.removeBook(e.target.parentElement);
+
+        //Show success message
+           UI.showAlert('Book Removed', 'success');
 
 });
